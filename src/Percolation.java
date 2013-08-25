@@ -1,3 +1,5 @@
+import javax.swing.text.html.HTMLDocument.HTMLReader.IsindexAction;
+
 
 public class Percolation {
 
@@ -8,18 +10,18 @@ public class Percolation {
     
     public Percolation(int N) {
         width = height = N;
-        numberOfSites = N^2;
-        quickUnion = new WeightedQuickUnionUF(numberOfSites+2);
+        numberOfSites = N*N;
+        quickUnion = new WeightedQuickUnionUF(numberOfSites);
         sites = new int[numberOfSites];
-        for (int i = 0; i<= sites.length; i++)
+        for (int i = 0; i< sites.length; i++)
         {
             sites[i] = 0; // all sites are closed
         }
-        for(int i = 0; i<=width; i++)
-        {
-            quickUnion.union(0, i);
-            quickUnion.union(sites.length, sites.length-i);
-        }
+//        for(int i = 0; i<=width; i++)
+//        {
+//            quickUnion.union(0, i);
+//            quickUnion.union(sites.length, sites.length-i);
+//        }
     }
     
     public void open(int i, int j) {
@@ -41,7 +43,7 @@ public class Percolation {
     
     private int positionNumber(int i, int j)
     {
-        return ((i-1)*width)+j; // get the position number;
+        return ((i-1)*width)+j-1; // get the position number;
     }
 
     public boolean isOpen(int i, int j) 
@@ -50,13 +52,26 @@ public class Percolation {
         return sites[cellNum] == 1;
     }
     
-    public boolean isFull(int i, int j) {
-        int toTest = positionNumber(i,j);
-        return quickUnion.connected(0, toTest);
+    public boolean isFull(int row, int j) {
+        int toTest = positionNumber(row,j);
+        for (int i = 0; i<width; i++)
+        {
+            if (isOpen(row,j) && quickUnion.connected(i, toTest))
+            {
+                return true;
+            }
+        }
+        return false;
     }
     
     public boolean percolates() {
-        return quickUnion.connected(0, sites.length);
+        for (int bottomrow = sites.length-width; bottomrow < sites.length; bottomrow++)
+        {
+            for (int toprow = 0; toprow < width; toprow++)
+            {
+                if (quickUnion.connected(toprow, bottomrow)) return true;
+            }
+        }
+        return false;
     }
-    
 }
