@@ -1,39 +1,13 @@
-import java.io.Console;
-
-
 public class PercolationStats {
 
-    static double _mean,_stddev,_confidenceLo,_confidenceHi = 0.0;
-    Percolation percolation;
-    
-    public static void main(String[] args) 
-    {
-        int gridSize, experimentCount = 0;
-        
-        try
-        {
-            gridSize = Integer.decode(args[0]);
-            experimentCount = Integer.decode(args[1]);
-            if (gridSize <= 0 || experimentCount <= 0)
-            {
-                throw new IllegalArgumentException("arguments must be greater than zero");
-            }
-        }
-        catch (Exception e)
-        {
-            throw e;
-        }
-        PercolationStats s = new PercolationStats(gridSize, experimentCount);
-        System.out.println("mean                  = "+_mean);
-        System.out.println("stddev                = "+_stddev);
-        System.out.println("95% Confidence Level  = "+_confidenceLo+", "+_confidenceHi);
-    }
+    private double mean, stddev, confidenceLo, confidenceHi;
+    private Percolation percolation;
     
     public PercolationStats(int N, int T) {
         percolation = new Percolation(N);
         double[] thresholds = new double[T];
         
-        for (int i = 0; i<T;i++)
+        for (int i = 0; i < T; i++)
         {
             int totalSites = N*N;
             int openSites = 0;
@@ -44,13 +18,19 @@ public class PercolationStats {
                 openNextPosition(N);
                 openSites++;
             }
-            thresholds[i] = (double)openSites/totalSites;
+            thresholds[i] = (double) openSites/totalSites;
         }
-        _mean = StdStats.mean(thresholds);
-        _stddev = StdStats.stddev(thresholds);
-        _confidenceLo = _mean-((1.96*_stddev)/Math.sqrt(T));
-        _confidenceHi = _mean+((1.96*_stddev)/Math.sqrt(T));
+        mean = StdStats.mean(thresholds);
+        stddev = StdStats.stddev(thresholds);
+        confidenceLo = mean-((1.96*stddev)/Math.sqrt(T));
+        confidenceHi = mean+((1.96*stddev)/Math.sqrt(T));
         
+        System.out.println("mean                  = "+mean);
+        System.out.println("stddev                = "+stddev);
+        System.out.println("95% Confidence Level  = "
+            +confidenceLo
+            +", "
+            +confidenceHi);
     }
     
     public void openNextPosition(int maxPosition)
@@ -67,21 +47,38 @@ public class PercolationStats {
                 return;
             }
         }
-        
-        
-        
     }
     
-    public double mean(){
-        return _mean;
+    public double mean() {
+        return mean;
     }
-    public double stddev(){
-        return _stddev;
+    public double stddev() {
+        return stddev;
     }
-    public double confidenceLo(){
-        return _confidenceLo;
+    public double confidenceLo() {
+        return confidenceLo;
     }
-    public double confidenceHi(){
-        return _confidenceHi;
+    public double confidenceHi() {
+        return confidenceHi;
+    }
+    
+    public static void main(String[] args) 
+    {
+        int gridSize, experimentCount = 0;
+        
+        try
+        {
+            gridSize = Integer.decode(args[0]);
+            experimentCount = Integer.decode(args[1]);
+            if (gridSize <= 0 || experimentCount <= 0)
+            {
+                throw new IllegalArgumentException("arguments must be > zero");
+            }
+        }
+        catch (NumberFormatException e)
+        {
+            throw e;
+        }
+        new PercolationStats(gridSize, experimentCount);
     }
 }
