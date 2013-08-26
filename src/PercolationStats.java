@@ -33,7 +33,7 @@ public class PercolationStats {
             +confidenceHi);
     }
     
-    public void openNextPosition(int maxPosition)
+    private void openNextPosition(int maxPosition)
     {
         boolean retval = false;
         
