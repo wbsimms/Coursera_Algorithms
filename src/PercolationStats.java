@@ -1,10 +1,10 @@
+
 public class PercolationStats {
 
     private double mean, stddev, confidenceLo, confidenceHi;
     private Percolation percolation;
     
     public PercolationStats(int N, int T) {
-        percolation = new Percolation(N);
         double[] thresholds = new double[T];
         
         for (int i = 0; i < T; i++)

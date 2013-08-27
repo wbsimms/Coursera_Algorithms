@@ -9,17 +9,17 @@ public class Percolation {
         width = N; 
         height = N;
         numberOfSites = N*N;
-        quickUnion = new WeightedQuickUnionUF(numberOfSites);
+        quickUnion = new WeightedQuickUnionUF(numberOfSites+1);
         sites = new int[numberOfSites];
         for (int i = 0; i < sites.length; i++)
         {
             sites[i] = 0; // all sites are closed
         }
-//        for(int i = 0; i<=width; i++)
-//        {
-//            quickUnion.union(0, i);
-//            quickUnion.union(sites.length, sites.length-i);
-//        }
+        for (int i = 0; i <= width; i++)
+        {
+//            quickUnion.union(, i);
+            quickUnion.union(numberOfSites, sites.length-i);
+        }
     }
     
     public void open(int i, int j) {
@@ -51,11 +51,17 @@ public class Percolation {
 
     public boolean isOpen(int i, int j) 
     {
+        if (i > height || i < 1) throw new IndexOutOfBoundsException();
+        if (j > width || j < 1) throw new IndexOutOfBoundsException();
+        
         int cellNum = positionNumber(i, j); // get the position number;
         return sites[cellNum] == 1;
     }
     
     public boolean isFull(int row, int j) {
+        if (row > height || row < 1) throw new IndexOutOfBoundsException();
+        if (j > width || row < 1) throw new IndexOutOfBoundsException();
+
         int toTest = positionNumber(row, j);
         for (int i = 0; i < width; i++)
         {
@@ -68,14 +74,9 @@ public class Percolation {
     }
     
     public boolean percolates() {
-        for (int bottomrow = sites.length-width;
-                bottomrow < sites.length; 
-                bottomrow++)
+        for (int toprow = 0; toprow < width; toprow++)
         {
-            for (int toprow = 0; toprow < width; toprow++)
-            {
-                if (quickUnion.connected(toprow, bottomrow)) return true;
-            }
+            if (quickUnion.connected(toprow, numberOfSites)) return true;
         }
         return false;
     }
