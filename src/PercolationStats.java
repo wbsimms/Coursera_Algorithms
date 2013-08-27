@@ -1,10 +1,11 @@
+
 public class PercolationStats {
 
     private double mean, stddev, confidenceLo, confidenceHi;
     private Percolation percolation;
     
     public PercolationStats(int N, int T) {
-        percolation = new Percolation(N);
+        if (N <= 0 || T <= 0) throw new IndexOutOfBoundsException();
         double[] thresholds = new double[T];
         
         for (int i = 0; i < T; i++)
