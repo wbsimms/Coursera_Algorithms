@@ -69,12 +69,13 @@ public class Deque<Item> implements Iterable<Item> {
     public Iterator<Item> iterator() {
         return null;
     }
-    
+
+    class Node<NodeItem>
+    {
+        public NodeItem item;
+        public Node<NodeItem> node;
+    }
+
 }
 
-class Node<NodeItem>
-{
-    public NodeItem item;
-    public Node<NodeItem> node;
-}
 
