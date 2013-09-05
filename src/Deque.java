@@ -29,7 +29,7 @@ public class Deque<Item> implements Iterable<Item> {
             Node<Item> temp = firstNode;
             Node<Item> newNode = new Node<Item>();
             newNode.item = item;
-            newNode.node = temp;
+            newNode.next = temp;
             firstNode = newNode;
         }
         nodeCount++;
@@ -45,37 +45,75 @@ public class Deque<Item> implements Iterable<Item> {
             Node<Item> temp = lastNode;
             Node<Item> newNode = new Node<Item>();
             newNode.item = item;
-            temp.node = newNode;
+            temp.next = newNode;
             lastNode = newNode;
         }
         nodeCount++;
     }
 
     public Item removeFirst() {
-        return (Item) new Object();
-        
+        Node<Item> first = firstNode;
+        firstNode = first.next;
+        Item i = first.item;
+        first = null;
+        return i;
     }
 
     public Item removeLast() {
-        return (Item) new Object();
+        Node<Item> last = lastNode;
+        Node<Item> nextToLast = findNextToLastNode(firstNode);
+        Item i = last.item;
+        nextToLast.next = last = null;
+        lastNode = nextToLast;
+        return i;
     }
-
-    public static void main(String[] args) {
-        // TODO Auto-generated method stub
-
+    
+    public Node<Item> getFirstNode()
+    {
+        return this.firstNode;
     }
+    
+    private Node<Item> findNextToLastNode(Node<Item> node)
+    {
+        if (node.next.next == null) return node;
+        return findNextToLastNode(node.next);
+   }
 
     @Override
     public Iterator<Item> iterator() {
-        return null;
+        return new DequeIterator<Item>();
+    }
+
+    
+    class DequeIterator<IItem> implements Iterator<IItem> {
+
+        private Node<IItem> currentNode = (Node<IItem>) firstNode;
+        
+        @Override
+        public boolean hasNext() {
+            return currentNode != null;
+        }
+
+        @Override
+        public IItem next() {
+            Node<IItem> temp = currentNode;
+            currentNode = currentNode.next;
+            return temp.item;
+        }
+
+        @Override
+        public void remove() {
+       }
+    
     }
 
     class Node<NodeItem>
     {
         public NodeItem item;
-        public Node<NodeItem> node;
+        public Node<NodeItem> next;
     }
 
 }
+
 
 
