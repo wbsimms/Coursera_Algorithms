@@ -67,7 +67,6 @@ public class DequeTest {
             System.out.println(s);
         }
         assertTrue(cut.size() == 2);
-        
     }
 
     
