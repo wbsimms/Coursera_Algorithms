@@ -68,14 +68,10 @@ public class Deque<Item> implements Iterable<Item> {
         Node<Item> last = lastNode;
         Node<Item> nextToLast = findNextToLastNode(firstNode);
         Item i = last.item;
-        nextToLast.next = last = null;
+        nextToLast.next = null;
+        last = null;
         lastNode = nextToLast;
         return i;
-    }
-    
-    public Node<Item> getFirstNode()
-    {
-        return this.firstNode;
     }
     
     private Node<Item> findNextToLastNode(Node<Item> node)
@@ -90,7 +86,7 @@ public class Deque<Item> implements Iterable<Item> {
     }
 
     
-    class DequeIterator<IItem> implements Iterator<IItem> {
+    private class DequeIterator<IItem> implements Iterator<IItem> {
 
         private Node<IItem> currentNode = (Node<IItem>) firstNode;
         
@@ -101,7 +97,7 @@ public class Deque<Item> implements Iterable<Item> {
 
         @Override
         public IItem next() {
-            if (currentNode == null) 
+            if (currentNode == null) throw new NoSuchElementException();
             Node<IItem> temp = currentNode;
             currentNode = currentNode.next;
             return temp.item;
@@ -114,7 +110,7 @@ public class Deque<Item> implements Iterable<Item> {
     
     }
 
-    class Node<NodeItem>
+    private class Node<NodeItem>
     {
         public NodeItem item;
         public Node<NodeItem> next;
