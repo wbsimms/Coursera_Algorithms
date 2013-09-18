@@ -1,7 +1,7 @@
 public class Percolation {
 
     private int numberOfSites;
-    private boolean[] sites;
+    private int[] sites;
     private int height, width;
     private WeightedQuickUnionUF quickUnion;
     
@@ -10,14 +10,15 @@ public class Percolation {
         height = N;
         numberOfSites = N*N;
         quickUnion = new WeightedQuickUnionUF(numberOfSites+1);
-        sites = new boolean[numberOfSites];
+        sites = new int[numberOfSites];
         for (int i = 0; i < sites.length; i++)
         {
-            sites[i] = false; // all sites are closed
+            sites[i] = 0; // all sites are closed
         }
         for (int i = 0; i <= width; i++)
         {
-            quickUnion.union(numberOfSites, numberOfSites-i);
+//            quickUnion.union(, i);
+            quickUnion.union(numberOfSites, sites.length-i);
         }
     }
     
@@ -25,9 +26,10 @@ public class Percolation {
         if (i > height || i < 1 || j > width || j < 1)
             throw new IndexOutOfBoundsException();
 
+        
         int cellNum = positionNumber(i, j); // get the position number;
-        if (sites[cellNum]) return;
-        sites[cellNum] = true;
+        if (sites[cellNum] == 1) return;
+        sites[cellNum] = 1;
         
         // this connects the cells above and below
         if (i < height && isOpen(i+1, j)) 
@@ -53,19 +55,17 @@ public class Percolation {
         if (j > width || j < 1) throw new IndexOutOfBoundsException();
         
         int cellNum = positionNumber(i, j); // get the position number;
-//        if (quickUnion.find(cellNum) == cellNum) return false;
-        return sites[cellNum];
-//        return true;
+        return sites[cellNum] == 1;
     }
     
     public boolean isFull(int row, int j) {
         if (row > height || row < 1) throw new IndexOutOfBoundsException();
-        if (j > width || j < 1) throw new IndexOutOfBoundsException();
+        if (j > width || row < 1) throw new IndexOutOfBoundsException();
 
         int toTest = positionNumber(row, j);
         for (int i = 0; i < width; i++)
         {
-            if (sites[toTest] && quickUnion.connected(i, toTest))
+            if (isOpen(row, j) && quickUnion.connected(i, toTest))
             {
                 return true;
             }

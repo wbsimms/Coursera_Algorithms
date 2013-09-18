@@ -5,7 +5,6 @@ public class PercolationStats {
     private Percolation percolation;
     
     public PercolationStats(int N, int T) {
-        if (N <= 0 || T <= 0) throw new IndexOutOfBoundsException();
         double[] thresholds = new double[T];
         
         for (int i = 0; i < T; i++)
@@ -73,7 +72,7 @@ public class PercolationStats {
             experimentCount = Integer.decode(args[1]);
             if (gridSize <= 0 || experimentCount <= 0)
             {
-                throw new IllegalArgumentException(u);
+                throw new IllegalArgumentException("arguments must be > zero");
             }
         }
         catch (NumberFormatException e)
