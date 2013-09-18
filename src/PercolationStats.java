@@ -73,7 +73,7 @@ public class PercolationStats {
             experimentCount = Integer.decode(args[1]);
             if (gridSize <= 0 || experimentCount <= 0)
             {
-                throw new IllegalArgumentException("arguments must be > zero");
+                throw new IllegalArgumentException(u);
             }
         }
         catch (NumberFormatException e)

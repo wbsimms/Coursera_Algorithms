@@ -17,8 +17,7 @@ public class Percolation {
         }
         for (int i = 0; i <= width; i++)
         {
-//            quickUnion.union(, i);
-            quickUnion.union(numberOfSites, sites.length-i);
+            quickUnion.union(numberOfSites, numberOfSites-i);
         }
     }
     
@@ -26,7 +25,6 @@ public class Percolation {
         if (i > height || i < 1 || j > width || j < 1)
             throw new IndexOutOfBoundsException();
 
-        
         int cellNum = positionNumber(i, j); // get the position number;
         if (sites[cellNum]) return;
         sites[cellNum] = true;
@@ -55,7 +53,9 @@ public class Percolation {
         if (j > width || j < 1) throw new IndexOutOfBoundsException();
         
         int cellNum = positionNumber(i, j); // get the position number;
+//        if (quickUnion.find(cellNum) == cellNum) return false;
         return sites[cellNum];
+//        return true;
     }
     
     public boolean isFull(int row, int j) {
@@ -65,7 +65,7 @@ public class Percolation {
         int toTest = positionNumber(row, j);
         for (int i = 0; i < width; i++)
         {
-            if (isOpen(row, j) && quickUnion.connected(i, toTest))
+            if (sites[toTest] && quickUnion.connected(i, toTest))
             {
                 return true;
             }
